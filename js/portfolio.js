@@ -11,7 +11,11 @@
     ];
 
     const dots = document.querySelector(".dots");
+    // ده عشان يغير لون اللينكات في الناف بار بس
     const navLinks = Array.from(document.querySelectorAll(".site-header a"));
+
+    // التعديل هنا: تحديد كل الروابط في الصفحة اللي بتشاور على سكشن داخلي (بما فيها زرار Hire Me)
+    const allInternalLinks = document.querySelectorAll('a[href^="#"]');
 
     // ===== متغيرات لمنع تداخل الـ Scroll =====
     let isScrolling = false;
@@ -23,14 +27,12 @@
         button.type = "button";
         button.setAttribute("aria-label", `Go to ${id}`);
         button.addEventListener("click", () => {
-            // إيقاف الـ Observer مؤقتاً
             isScrolling = true;
             setActive(id);
             history.replaceState(null, null, `#${id}`);
 
             document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
-            // إعادة تشغيل الـ Observer بعد ثانية (وقت كافي لانتهاء الـ smooth scroll)
             clearTimeout(scrollTimeout);
             scrollTimeout = setTimeout(() => {
                 isScrolling = false;
@@ -64,19 +66,17 @@
             if (visible && visible.target && visible.target.id) {
                 const sectionId = visible.target.id;
 
-                // مش هنحدث الـ URL أو الـ Active State إلا لو اليوزر بيعمل Scroll بنفسه
                 if (!isScrolling) {
                     setActive(sectionId);
                     history.replaceState(null, null, `#${sectionId}`);
                 }
 
                 // ===== أنيميشن للكروت في قسم Our Services =====
-                // الأنيميشن هيفضل شغال عادي في كل الحالات
                 if (sectionId === "my-work") {
                     document.querySelectorAll(".service-card").forEach((card, i) => {
                         setTimeout(() => {
                             card.classList.add("show");
-                        }, i * 150); // تأخير بسيط بين الكروت
+                        }, i * 150);
                     });
                 }
             }
@@ -88,8 +88,8 @@
         if (el) observer.observe(el);
     });
 
-    // ===== Smooth Scrolling للروابط =====
-    navLinks.forEach((link) => {
+    // ===== Smooth Scrolling لجميع الروابط الداخلية (التعديل الجديد) =====
+    allInternalLinks.forEach((link) => {
         link.addEventListener("click", (e) => {
             e.preventDefault();
             const targetId = link.getAttribute("href")?.slice(1);
