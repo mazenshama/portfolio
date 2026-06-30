@@ -38,6 +38,11 @@ body {
     inset: 0 0 auto 0;
     z-index: 40;
     pointer-events: none;
+    background: rgba(23, 23, 23, 0.75);
+    /* نفس درجة الـ --bg (#171717) مع شفافية 75% */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    /* لدعم متصفحات سفاري */
 }
 
 .site-header .nav {
